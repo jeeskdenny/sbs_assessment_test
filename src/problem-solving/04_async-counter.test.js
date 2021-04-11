@@ -8,9 +8,9 @@ function testCount({ startCount, endCount, done, cancelAfter }) {
     let cancel = null;
     let isDone = false;
     const finish = (error) => {
-      if (isDone) return;
-      isDone = true;
-      done(error);
+        if (isDone) return;
+        isDone = true;
+        done(error);
     };
     const triggerFinish = () => {
         doneTimeout = setTimeout(() => {
@@ -19,29 +19,29 @@ function testCount({ startCount, endCount, done, cancelAfter }) {
     }
     const callback = (count) => {
         try {
-          const timeDiff = Date.now() - start;
-          const run = count - startCount + 1;
-          const bottomBorder = run * ms;
-          const topBoard = bottomBorder + 10 * run;
-          expect(timeDiff).toBeGreaterThanOrEqual(bottomBorder);
-          expect(timeDiff).toBeLessThanOrEqual(topBoard);
-          if (doneTimeout) {
-              clearTimeout(doneTimeout);
-              expect('Never to reach this point').toEqual('Callback called after end');
-              return;
-          }
-          if (cancelAfter) {
-              expect(count).toBeLessThanOrEqual(cancelAfter);
-          }
-          if (count === endCount) {
-              triggerFinish();
-              return;
-          }
-          if (cancelAfter && cancelAfter === count) {
-            expect(cancel).toBeInstanceOf(Function);
-            cancel();
-            triggerFinish();
-          }
+            const timeDiff = Date.now() - start;
+            const run = count - startCount + 1;
+            const bottomBorder = run * ms;
+            const topBoard = bottomBorder + 10 * run;
+            expect(timeDiff).toBeGreaterThanOrEqual(bottomBorder);
+            expect(timeDiff).toBeLessThanOrEqual(topBoard);
+            if (doneTimeout) {
+                clearTimeout(doneTimeout);
+                expect('Never to reach this point').toEqual('Callback called after end');
+                return;
+            }
+            if (cancelAfter) {
+                expect(count).toBeLessThanOrEqual(cancelAfter);
+            }
+            if (count === endCount) {
+                triggerFinish();
+                return;
+            }
+            if (cancelAfter && cancelAfter === count) {
+                expect(cancel).toBeInstanceOf(Function);
+                cancel();
+                triggerFinish();
+            }
         } catch (error) {
             finish(error);
         }

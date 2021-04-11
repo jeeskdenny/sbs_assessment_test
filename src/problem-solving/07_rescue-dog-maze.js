@@ -19,3 +19,56 @@
  *
  * See the test if you have questions.
  */
+
+export function rescuePrincessPath(a) {
+    let { maze, columns, startPosition, rows } = a;
+    let colIndex = 0;
+    let totalPosition = [];
+    let rowColMap = [];
+    maze.map((mainElement, mainIndex) => {
+        mainElement.map((subElement, subIndex) => {
+            totalPosition[colIndex] = { row: mainIndex, column: subIndex };
+            rowColMap[mainIndex + ":" + subIndex] = colIndex;
+            colIndex = colIndex + 1;
+        })
+    });
+    let col = totalPosition[startPosition].column;
+    let row = totalPosition[startPosition].row;
+
+    let fullPath = [];
+    let flag = true;
+    async function path(c, r) {
+        if (maze[r][c] == 'd') {
+            fullPath.push(rowColMap[r + ":" + c]);
+            flag = false;
+        } else if (maze[r][c] == ' ') {
+            if (flag) {
+                fullPath.push(rowColMap[r + ":" + c]);
+                maze[r][c] = 'f';
+
+                //checking right side of the node
+                if (c < (columns - 1)) {
+                    path(c + 1, r);
+                }
+
+                //checking the bottom side of the node
+                if (r < (rows - 1)) {
+                    path(c, r + 1);
+                }
+
+                //checking the top side of the node
+                if (r > 0) {
+                    path(c, r - 1);
+                }
+
+                //checking left side of the node.
+                if (c > 0) {
+                    path(c - 1, r);
+                }
+            }
+        }
+    };
+
+    path(col, row);
+    return (!flag) ? fullPath : undefined;
+}

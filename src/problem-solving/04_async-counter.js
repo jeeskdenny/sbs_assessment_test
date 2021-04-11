@@ -8,3 +8,26 @@
  * @param {function(number): void} callback - Called after each 100ms with an increment
  * @returns {function(): void} - Cancel countdown function
  */
+
+export function count(start, end, callback) {
+    let msTimeout = [];
+    function timeout() {
+        if (start <= end) {
+            msTimeout.push(setTimeout(() => {
+                callback(start);
+                start++;
+                timeout();
+            }, 100));
+        }
+    }
+
+    const cancel = () => {
+        for (let i = msTimeout.length - 1; i >= 0; i--) {
+            clearTimeout(msTimeout[i]);
+        }
+        throw 0;
+    }
+
+    timeout();
+    return cancel;
+};
